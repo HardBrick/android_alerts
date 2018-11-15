@@ -3,6 +3,7 @@ package com.android.joseg.persistencia;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
 
     Button btnAlertNormal;
@@ -20,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     Button btnAlertHora;
     Button btnAlertList;
     Button btnAlertListaCheck;
+    Button btnGrabar;
+    Button btnLeer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         btnAlertHora = (Button)findViewById(R.id.btnAlertHora);
         btnAlertList = (Button)findViewById(R.id.btnAlertList);
         btnAlertListaCheck = (Button)findViewById(R.id.btnAlertListaCheck);
+        btnGrabar = (Button)findViewById(R.id.btnGrabar);
+        btnLeer = (Button)findViewById(R.id.btnLeer);
 
 
         btnAlertNormal.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +142,30 @@ public class MainActivity extends AppCompatActivity {
                         })
                         .setNegativeButton("Cancelar",null);
                 alertOpc.create().show();
+            }
+        });
+
+        btnGrabar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences preferences = getSharedPreferences("datos",MODE_PRIVATE);
+                SharedPreferences.Editor editPreferences = preferences.edit();
+                editPreferences.putString("user","joseg");
+                editPreferences.putString("pass", "hola123");
+                editPreferences.commit();
+
+            }
+        });
+
+        btnLeer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences preferences = getSharedPreferences("datos",MODE_PRIVATE);
+                Map<String,?> keys = preferences.getAll();
+                for (Map.Entry<String,?> entry : keys.entrySet()
+                     ) {
+                    Log.d("TAG_", entry.getKey() + " - " + entry.getValue());
+                }
             }
         });
     }
